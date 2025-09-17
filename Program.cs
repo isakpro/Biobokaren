@@ -8,28 +8,28 @@ namespace Biobokaren
 {
     internal class Program
     {
-        
-        
-            const double TAX_RATE = 0.06;
-            const double DISCOUNT_RATE = 0.15;
-            const string CURRENCY = "SEK";
 
-            static void Main(string[] args)
+
+        const double TAX_RATE = 0.06;
+        const double DISCOUNT_RATE = 0.15;
+        const string CURRENCY = "SEK";
+
+        static void Main(string[] args)
 
         {
             string[] movies = { "The Shawshank Redemption", "The Dark Knight", "Forrest Gump" };
             string[] showTimes = { "12:00", "15:00", "19:00" };
-            double[] prices = { 100.0, 120.0, 150.0 };
+            double[] basePrices = { 100.0, 120.0, 150.0 };
 
             int selectedMovie = -1;
-            int selectedTimeIndes = -1;
+            int selectedTimeIndex = -1;
             int ticketCount = 0;
             bool isStudent = false;
 
             bool running = true;
             while (running)
 
-                {
+            {
 
                 ShowMenu();
                 if (!int.TryParse(Console.ReadLine(), out int menuChoice))
@@ -48,7 +48,7 @@ namespace Biobokaren
                     case 2:
                         ListMovies(movies, showTimes, basePrices);
                         Console.Write("Select a movie by number: ", movies.Length - 1);
-                        if ( (!int.TryParse(Console.ReadLine(), out int movieIdx) || movieIdx < 0 || movieIdx >= movies.Length)
+                        if (!int.TryParse(Console.ReadLine(), out int movieIdx) || movieIdx < 0 || movieIdx >= movies.Length)
                         {
                             Console.WriteLine("Invalid movie selection.");
                             break;
@@ -75,7 +75,7 @@ namespace Biobokaren
                             ticketCount = 0;
                             break;
                         }
-                        ticketCount = tickets;
+                       
 
                         Console.WriteLine($"Selectedt: {movies[selectedMovie]} at {showTimes[selectedTimeIndex]} for {ticketCount} tickets.");
                         break;
@@ -86,13 +86,96 @@ namespace Biobokaren
                         break;
 
                     case 4:
-                        if (selectedMovie < 0 || selectedTimeIndex < 0 || ticketCountt <= 0)
-                            {
+                        if (selectedMovie < 0 || selectedTimeIndex < 0 || ticketCount <= 0)
+                        {
                             Console.WriteLine("Select a movie, showtime, and ticket count first.");
                             break;
                         }
 
+                        double basePrice = basePrices[selectedMovie];
 
-        
+                        double totalExTax = isStudent
+                            ? CalculatePrice(ticketCount, basePrice, DISCOUNT_RATE)
+                            : CalculatePrice(ticketCount, basePrice);
+
+                        double totalInclTax = totalExTax * (1 + TAX_RATE);
+
+                        PrintReceipt(
+                            movie: movies[selectedMovie],
+                            time: showTimes[selectedTimeIndex],
+                            tickets: ticketCount,
+                            subtotal: totalExTax,
+                            total: totalInclTax,
+                            isStudent: isStudent);
+                        break;
+
+                    case 5:
+                        running = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid menu choice.");
+                        break;
+
+                }
+
+                Console.WriteLine(); //radbrytare
+
+
+            }
+
+            Console.WriteLine("Thank you for using Biobokaren. Goodbye!");
+
+        }
+
+
+        static void ShowMenu()
+        {
+            Console.WriteLine("Biobokaren Menu:");
+            Console.WriteLine("1. List Movies");
+            Console.WriteLine("2. Select Movie and Showtime");
+            Console.WriteLine("3. Toggle Student Discount");
+            Console.WriteLine("4. Checkout");
+            Console.WriteLine("5. Exit");
+        }
+
+        static void ListMovies(string[] movies, string[] times, double[] basePrices)
+        {
+            Console.WriteLine("Available Movies:");
+            for (int i = 0; i < movies.Length; i++)
+            {
+                Console.WriteLine($"{i}. {movies[i]} - Price: {basePrices[i]:F2} {CURRENCY}");
+            }
+
+            Console.WriteLine("Showtimes:");
+            for (int j = 0; j < times.Length; j++)
+            {
+                Console.WriteLine($" {j}. {times[j]}");
+            }
+        }
+
+        static double CalculatePrice(int tickets, double basePrice)
+        {
+            return tickets * basePrice;
+        }
+        static double CalculatePrice(int tickets, double basePrice, double discountPercent)
+        {
+            double raw = tickets * basePrice;
+            double discounted = raw * (1 - discountPercent);
+            return discounted;
+        }
+
+        static void PrintReceipt(string movie, string time, int tickets, double subtotal, double total, bool isStudent)
+        {
+            Console.WriteLine("----- Receipt -----");
+            Console.WriteLine($"Movie: {movie}");
+            Console.WriteLine($"Showtime: {time}");
+            Console.WriteLine($"Tickets: {tickets}");
+            Console.WriteLine($"Student Discount: {(isStudent ? "Yes" : "No")}");
+            Console.WriteLine($"Subtotal (excl. tax): {subtotal:F2} {CURRENCY}");
+            Console.WriteLine($"Total (incl. tax): {total:F2} {CURRENCY}");
+            Console.WriteLine("-------------------");
+
+        }
     }
 }

@@ -1,0 +1,7 @@
+C:\Users\isakr\source\repos\Biobokaren\Biobokaren\obj\Debug\Biobokaren.csproj.AssemblyReference.cache
+C:\Users\isakr\source\repos\Biobokaren\Biobokaren\obj\Debug\Biobokaren.csproj.CoreCompileInputs.cache
+C:\Users\isakr\source\repos\Biobokaren\Biobokaren\bin\Debug\Biobokaren.exe.config
+C:\Users\isakr\source\repos\Biobokaren\Biobokaren\bin\Debug\Biobokaren.exe
+C:\Users\isakr\source\repos\Biobokaren\Biobokaren\bin\Debug\Biobokaren.pdb
+C:\Users\isakr\source\repos\Biobokaren\Biobokaren\obj\Debug\Biobokaren.exe
+C:\Users\isakr\source\repos\Biobokaren\Biobokaren\obj\Debug\Biobokaren.pdb
